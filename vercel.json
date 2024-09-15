@@ -1,17 +1,17 @@
 {
-    "builds": [
-      {
-        "src": "api/main.py",
-        "use": "@vercel/python"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "api/main.py"
-      }
-    ],
-    "files": [
-      "test_08_db.db"
-    ]
+  "builds": [
+    {
+      "src": "api/main.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "api/main.py"
+    }
+  ],
+  "env": {
+    "ENVIRONMENT": "production"
   }
+}
