@@ -20,6 +20,10 @@ import json
 
 
 
+
+
+
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -203,6 +207,8 @@ async def schedule(request: Request, time_zone: str = "UTC", db: Session = Depen
     logger.info(f"Time zone is {time_zone}")
 
     tasks = db.query(Schedule).order_by(Schedule.start_datetime).offset(skip).limit(limit).all()
+    
+    print('schedule=', pd.DataFrame(tasks))
 
     start_date_adjust = request.session.get('start_date_adjust', 0)
     start_date = datetime.today() - timedelta(days=datetime.today().weekday() + start_date_adjust)
@@ -282,116 +288,42 @@ async def schedule(request: Request, time_zone: str = "UTC", db: Session = Depen
         "login_username": login_username,
         "tab_page_active": tab_page_active
     })
+    
+# --------------------
 
-# @app.get("/schedule/")
-# async def schedule(request: Request, time_zone: str = "UTC", db: Session = Depends(get_db), date_sequence = date_sequence, today_date = today_date):  
-# # async def get_tasks(request: Request, db: Session = Depends(get_db), date_sequence = date_sequence, today_date = today_date):
-# # async def get_tasks(request: Request, db: Session = Depends(get_db), date_sequence = date_sequence, today_date = today_date, login_username = login_username):
-#     # global local_time_zone
-#     # global active_meeting
-#     login_username = request.session.get('login_username')
-#     time_zone = request.session.get('time_zone')
-#     # today_date = request.session.get('today_date')
-#     print(f"time_zone is {time_zone}")
+@app.post("/schedule/up/")
+# @app.get("/schedule/up/")
+async def schedule_up(request: Request):
     
-#     # tasks = db.query(Meeting).order_by(Meeting.name).all()
-#     tasks = db.query(Schedule).order_by(Schedule.start_datetime).all()
+    test_date = request.session.get('start_date_adjust')
+    test_date = test_date - 7
+    request.session['start_date_adjust'] = test_date
+    test_date = request.session.get('start_date_adjust')
     
-#     start_date_adjust = request.session.get('start_date_adjust')
+    print(test_date)
     
-#     start_date = datetime.today() - timedelta(days = datetime.today().weekday() + start_date_adjust ) # set up monday is start_date
-#     date_sequence = [str((start_date + timedelta(days=i)).strftime('%Y-%m-%d')) for i in range(7*50)]  # 7*10 days sequence
-#     today_date = datetime.today().strftime('%Y-%m-%d')
-    
-    
-    
-    
-    
-#     # users = db.query(User).order_by(User.start_datetime).all()
-    
-#     data = [{
-#     'id': task.id,
-#     'name': task.name,
-#     'start_datetime': task.start_datetime,
-#     'end_datetime': task.end_datetime,
-#     'link': task.link,
-#     'category': task.category,
-#     'status': task.status,
-#     'id_user': task.id_user
-#     } for task in tasks]
 
-#     # df_tasks = pd.DataFrame(data)
-#     # print(tasks.start_datetime)
+    return RedirectResponse("/schedule/", status_code=303)
+    # return templates.TemplateResponse("link_indicate_00.html", {"request": request, "today_date": today_date})
     
+# --------------------
+
+@app.post("/schedule/down/")
+# @app.get("/schedule/down/")
+async def schedule_up(request: Request):
     
-#     df_tasks = pd.DataFrame(data)
-#     # print("df_tasks", df_tasks)
-#     # print(df_tasks)
+    test_date = request.session.get('start_date_adjust')
+    test_date = test_date + 7
+    request.session['start_date_adjust'] = test_date
+    test_date = request.session.get('start_date_adjust')
     
-#     # print(df_tasks.iloc[0]['name'])
-#     local_start_dates = []
-#     local_start_times = []
-#     local_end_dates = []
-#     local_end_times = []
+    print(test_date)
     
-#     df_tasks['start_datetime'] = df_tasks['start_datetime'].dt.tz_localize('UTC')
-#     df_tasks['end_datetime'] = df_tasks['end_datetime'].dt.tz_localize('UTC')
-#     # df_tasks['start_datetime'] = df_tasks['start_datetime'].dt.tz_localize('UTC').dt.tz_convert(ZoneInfo(local_time_zone))
-    
-    
-#     for i in range(len(df_tasks)):
-#         df_task = df_tasks.iloc[i]
-    
-    
-#         local_start_datetime = df_task["start_datetime"].astimezone(ZoneInfo(time_zone))
-#         # local_start_datetime = df_task["start_datetime"].astimezone(ZoneInfo(local_time_zone))
-#     # #     # local_start_datetime = df_task.start_datetime.astimezone(ZoneInfo(local_time_zone))
-#         local_start_date = local_start_datetime.date()
-#         local_start_time = local_start_datetime.time().strftime("%H:%M")
-        
-        
-#     # #     print(f"Local Time in {local_time_zone}:", local_start_date)
-#         local_start_dates.append(str(local_start_date))
-#         local_start_times.append(str(local_start_time))
-        
-        
-#         local_end_datetime = df_task["end_datetime"].astimezone(ZoneInfo(time_zone))
-#         # local_end_datetime = df_task["end_datetime"].astimezone(ZoneInfo(local_time_zone))
-#     # #     # local_end_datetime = df_task.end_datetime.astimezone(ZoneInfo(local_time_zone))
-#         local_end_date = local_end_datetime.date()
-#         local_end_time = local_end_datetime.time().strftime("%H:%M")
-        
-        
-#     # #     print(f"Local Time in {local_time_zone}:", local_end_date)
-#         local_end_dates.append(str(str(local_end_date)))
-        
-#         local_end_times.append(str(local_end_time))
-        
-#     df_local_start_dates = pd.DataFrame(local_start_dates, columns=['local_start_date'])
-#     df_local_start_times = pd.DataFrame(local_start_times, columns=['local_start_time'])
-    
-#     df_local_end_dates = pd.DataFrame(local_end_dates, columns=['local_end_date'])
-#     df_local_end_times = pd.DataFrame(local_end_times, columns=['local_end_time'])
-   
-    
-#     df_combined = pd.concat([df_tasks, df_local_start_dates, df_local_start_times, df_local_end_dates, df_local_end_times], axis=1)
-#     # request.session['df_combined'] = df_combined  # Save to session
-#     # print("df_combined", df_combined)
-#     print(df_combined)
-    
-#     df_combined_dict = df_combined.to_dict(orient='records')
-    
-#     length_df_combined = len(df_combined)
-    
-#     time_zone_massage = "Current time zone :"
-    
-#     message_color = "#0f0"
-    
-#     tab_page_active = "schedule"
-    
-#     # print("df_combined", df_combined)
+
+    return RedirectResponse("/schedule/", status_code=303)
+
+
     
     
     
     
-#     return templates.TemplateResponse("schedule_indicate_00.html", {"request": request, "df_combined": df_combined_dict, "dates": date_sequence, "today": today_date, "time_zone": time_zone, "length_df_combined": length_df_combined, "local_start_date": local_start_date,"local_start_time": local_start_time, "time_zone_massage": time_zone_massage, "message_color": message_color, "login_username": login_username, "tab_page_active": tab_page_active})
