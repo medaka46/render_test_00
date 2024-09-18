@@ -17,6 +17,8 @@ from zoneinfo import ZoneInfo
 
 import json
 
+from sqlalchemy import desc
+
 
 
 
@@ -201,14 +203,19 @@ async def create_item(request: Request, login_username: str = Form(...), time_zo
 # --------------------
 
 @app.get("/schedule/")
-async def schedule(request: Request, time_zone: str = "UTC", db: Session = Depends(get_db), skip: int = 0, limit: int = 10):
+async def schedule(request: Request, time_zone: str = "UTC", db: Session = Depends(get_db), skip: int = 0, limit: int = 50):
+    
     login_username = request.session.get('login_username')
     time_zone = request.session.get('time_zone', time_zone)
     logger.info(f"Time zone is {time_zone}")
 
-    tasks = db.query(Schedule).order_by(Schedule.start_datetime).offset(skip).limit(limit).all()
+    # tasks = db.query(Schedule).order_by(Schedule.start_datetime).all()
+
+    tasks = db.query(Schedule).order_by(desc(Schedule.start_datetime)).offset(skip).limit(limit).all()
+    # tasks = db.query(Schedule).order_by(Schedule.start_datetime).offset(skip).limit(limit).all()
     
-    print('schedule=', pd.DataFrame(tasks))
+    
+    # print('schedule=', pd.DataFrame(tasks))
 
     start_date_adjust = request.session.get('start_date_adjust', 0)
     start_date = datetime.today() - timedelta(days=datetime.today().weekday() + start_date_adjust)
@@ -320,6 +327,68 @@ async def schedule_up(request: Request):
     print(test_date)
     
 
+    return RedirectResponse("/schedule/", status_code=303)
+
+
+# -------------------_
+
+
+@app.post("/schedule/add_task/")
+
+# async def create_item(name: str = Form(...), date1: str = Form(...), link: str = Form(...), tel: str = Form(...), db: Session = Depends(get_db)):
+# async def create_item(name: str = Form(...), date1: date1 = Form(...), link: str = Form(...), tel: str = Form(...), db: Session = Depends(get_db)):
+async def create_item(request: Request, name: str = Form(...), date1: str = Form(...), start_time: str = Form(...), end_time: str = Form(...), link: str = Form(None), category: str = Form(None), status: str = Form(None), username: str = Form(None), time_zone: str = Form(None), db: Session = Depends(get_db)):
+# async def create_item(request: Request, name: str = Form(...), date1: str = Form(...), start_time: str = Form(...), end_time: str = Form(...), link: str = Form(None), category: str = Form(None), status: str = Form(None), username: str = Form(None), local_time_zone = local_time_zone, db: Session = Depends(get_db)):
+    date1 = datetime.strptime(date1, '%Y-%m-%d').date()
+    if start_time == '' and end_time == '':
+        start_time = "00:00"
+        end_time = "00:00"
+    else:
+        pass
+    # global active_meeting
+    # date1 = date1.date()
+# Assuming date1 is a string in the format 'YYYY-MM-DD'
+    
+    # print("test")
+    print(f"{time_zone} @ schedule/add_task")
+    # local_time_zone = "Asia/Singapore"
+    
+    local_start_datetime = datetime.combine(date1, datetime.strptime(start_time, '%H:%M').time())
+    print(f"local_start_datetime : {local_start_datetime}")
+    local_end_datetime = datetime.combine(date1, datetime.strptime(end_time, '%H:%M').time())
+    
+    local_start_datetime_with_tz  = local_start_datetime.replace(tzinfo=ZoneInfo(time_zone))
+    # local_start_datetime_with_tz  = local_start_datetime.astimezone(ZoneInfo(get_current_timezone()))
+    # local_start_datetime_with_tz  = local_start_datetime.astimezone(ZoneInfo(time_zone))
+    utc_start_datetime_with_tz  = local_start_datetime_with_tz.astimezone(timezone.utc)
+    local_start_datetime_without_tz  = local_start_datetime_with_tz.replace(tzinfo=None)
+    utc_start_datetime_without_tz  = utc_start_datetime_with_tz.replace(tzinfo=None)
+    
+    local_end_datetime_with_tz  = local_end_datetime.replace(tzinfo=ZoneInfo(time_zone))
+    # local_end_datetime_with_tz  = local_end_datetime.astimezone(ZoneInfo(get_current_timezone()))
+    # local_end_datetime_with_tz  = local_end_datetime.astimezone(ZoneInfo(time_zone))
+    utc_end_datetime_with_tz  = local_end_datetime_with_tz.astimezone(timezone.utc)
+    local_end_datetime_without_tz  = local_end_datetime_with_tz.replace(tzinfo=None)
+    utc_end_datetime_without_tz  = utc_end_datetime_with_tz.replace(tzinfo=None)
+    
+    print("local startdatetime with tz", local_start_datetime_with_tz)
+    print("utc startdatetime with tz", utc_start_datetime_with_tz)
+    print("local startdatetime without tz", local_start_datetime_without_tz)
+    print("utc startdatetime without tz", utc_start_datetime_without_tz)
+    
+    
+    
+    
+    
+    end_datetime  = local_end_datetime.astimezone(ZoneInfo(time_zone))
+    
+    
+    db_item = Schedule(name=name, start_datetime=utc_start_datetime_with_tz, end_datetime=utc_end_datetime_with_tz, link=link, category=category, status=status)
+    # db_item = Schedule(name=name, start_datetime=utc_start_datetime_without_tz, end_datetime=utc_end_datetime_without_tz, link=link, category=category, status=status)
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+    
     return RedirectResponse("/schedule/", status_code=303)
 
 
