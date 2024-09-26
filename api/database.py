@@ -47,7 +47,7 @@ ENVIRONMENT = os.getenv('ENVIRONMENT', 'local')
 
 if ENVIRONMENT == 'production':
     # Path to the existing database file in your project root directory
-    LOCAL_DB_PATH = os.path.join(os.path.dirname(__file__), '../test_08_db_new.db')
+    LOCAL_DB_PATH = os.path.join(os.path.dirname(__file__), '../test_08_db_new_pp.db')
     # LOCAL_DB_PATH = os.path.join(os.path.dirname(__file__), '../test_08_db.db')
     # Path to the database file in the /tmp directory
     TMP_DB_PATH = '/tmp/test_08_db.db'
@@ -57,7 +57,7 @@ if ENVIRONMENT == 'production':
     DATABASE_URL = f"sqlite:///{TMP_DB_PATH}"
 else:
     # Local development database path
-    LOCAL_DB_PATH = os.path.join(os.path.dirname(__file__), '../test_08_db_new.db')
+    LOCAL_DB_PATH = os.path.join(os.path.dirname(__file__), '../test_08_db_new_pp.db')
     # LOCAL_DB_PATH = os.path.join(os.path.dirname(__file__), '../test_08_db.db')
     DATABASE_URL = f"sqlite:///{LOCAL_DB_PATH}"
 
