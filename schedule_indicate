@@ -2,43 +2,6 @@
 
 {% block content %}
 <header class="tab_00">
-    <div style="display: flex;">
-        <!-- <div class="title_00">Meeting Schedule {{ today }}</div> -->
-        <div class="title_00">Meeting Schedule    </div>
-        <div class="title_00" style="margin-left: 20px; ">{{ today }}</div>
-        <div id="clock_schedule" class="title_00" style="margin-left: 20px; "></div>
-        {# {{ local_start_date}} #}
-        <div style="margin-left: auto;">
-
-            <form action="/schedule/up/" method="post">
-                <button type="submit" style="background-color: #444; color: #0f0;"> -↑- </button>
-            </form>
-            <form action="/schedule/down/" method="post">
-                <button type="submit" style="background-color: #444; color: #0f0;">-↓-</button>
-            </form>
-        </div>
-
-    </div>
-
-
-    
-    <form action="/schedule/add_task/" method="post">
-        <input type="hidden" name="time_zone" value="{{ time_zone }}">
-
-        <input type="text" name="name" placeholder="Enter Name ..." style="background-color: #444; color: #fff;" oninput="this.style.backgroundColor = this.value ? '#444' : '#fff'; this.style.color = '#999'">
-        <!-- <input type="text" name="name" placeholder="Enter Name ..." style="background-color: #444; color: #fff;"> -->
-        <input id="input_date" type="date" name="date1" placeholder="MM/DD/YYYY"  style="background-color: #444; color: #888;"
-                onfocus="(this.type='date')">
-        <input type="time" name="start_time" placeholder="start HH:MM" value="00:00" style="background-color: #444; color: #888;"
-                onfocus="(this.type='time')">
-        <input type="time" name="end_time" value="00:00" style="background-color: #444; color: #888;">
-                
-        <input type="text" name="link" placeholder="Enter link..." style="background-color: #444; color: #fff;" oninput="this.style.backgroundColor = this.value ? '#444' : '#fff'; this.style.color = '#999'">
-        <input type="text" name="category" placeholder="Enter category..." style="background-color: #444; color: #fff;" oninput="this.style.backgroundColor = this.value ? '#444' : '#fff'; this.style.color = '#999'">
-        <input type="text" name="status" placeholder="Enter status..." style="background-color: #444; color: #fff;" oninput="this.style.backgroundColor = this.value ? '#444' : '#fff'; this.style.color = '#999'">
-        <button type="submit" style="background-color: #444; color: #0f0;">Add Task</button>
-    </form>
-    <!-- <button onclick="alertFunction()">Click Me!</button> -->
     <!-- ... existing code ... -->
 </header>
 
@@ -63,8 +26,7 @@
                             </div>
                             {% for item in df_combined %}
                                 {% if dates[i+ii*7] == item["local_start_date"] %}
-                                    <li class="li" onclick="onclickItem('{{ item.id }}')"> 
-                                    <!-- <li class="li" onclick="onclickItem('{{ item.id }}', '{{ item.link }}')">  -->
+                                    <li class="li" onclick="onclickItem('{{ item.id }}', '{{ item.link }}')"> 
                                         {% if item.local_start_time == '00:00' and item.local_end_time == '00:00' %}
                                             {{ '🟩 ' ~item.name }}
                                         {% else %}
@@ -86,7 +48,7 @@
         {% if has_more %}
             <button onclick="loadPage({{ next_skip }})">Next</button>
         {% endif %}
-        <span class="page">Page {{ current_page }} of {{ total_pages }}</span>
+        <span>Page {{ current_page }} of {{ total_pages }}</span>
 
     </div>
 </main>
