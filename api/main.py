@@ -1,10 +1,10 @@
 import logging
 from fastapi import FastAPI, Depends, Request, Form, Query, HTTPException
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
-from api.database import SessionLocal, engine, Base  # Use absolute import
+from api.database import SessionLocal, engine, Base # Use absolute import
 from api.models import User, Schedule  # Use absolute import
 import pandas as pd
 from datetime import datetime, timedelta, timezone
@@ -13,6 +13,9 @@ import json
 from starlette.middleware.sessions import SessionMiddleware
 
 from pandas import Timestamp
+
+import os
+
 
 
 
@@ -67,8 +70,30 @@ async def login_signup(request: Request):
     # print("login_signup.html")
     return templates.TemplateResponse("login_signup.html", {"request": request, "message": message, "message_color": message_color})
 
+# --------------------
+
+@app.get("/download_db/")
+async def download_db(request: Request, db: Session = Depends(get_db)):
+    # Construct the absolute path to the database file
+    db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'test_08_db_new_pp.db'))
+
+    if not os.path.exists(db_path):
+        raise HTTPException(status_code=404, detail="Database file not found")
+
+    return FileResponse(db_path, media_type='application/octet-stream', filename="test_08_db_new_pp.db")
+
+
+# @app.get("/download_db/")
+# async def download_db(request: Request, db: Session = Depends(get_db)):
+#     db_path = "../test_08_db_new_pp.db"  # Replace with the actual path to your SQLite database
+
+#     if not os.path.exists(db_path):
+#         raise HTTPException(status_code=404, detail="Database file not found")
+
+#     return FileResponse(db_path, media_type='application/octet-stream', filename="test_08_db_new_pp.db")
 
 # --------------------
+
 @app.post("/login_signup/add_user/")
 async def add_user(request: Request, username: str = Form(...), email: str = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
     try:

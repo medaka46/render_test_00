@@ -1,4 +1,0 @@
-01_00 : initial status
-01_01 : activate deployment by vercel
-01_02 : link to sqlite by sqlalchemy
-01_03 : translate test_08 to deploy -- doing --

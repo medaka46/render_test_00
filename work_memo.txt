@@ -1,2 +1,0 @@
-220240930 07:45
-    consider change deployment service from Vercel to others due to SQLite issue.
