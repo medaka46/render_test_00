@@ -233,7 +233,7 @@ async def schedule(request: Request, time_zone: str = "UTC", db: Session = Depen
         'name': task.name,
         # 'start_datetime': task.start_datetime.astimezone(ZoneInfo(time_zone)),
         # 'end_datetime': task.end_datetime.astimezone(ZoneInfo(time_zone)),
-        # 'link': task.link,
+        'link': task.link,
         
         
         'start_datetime': task.start_datetime,
