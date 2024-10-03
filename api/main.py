@@ -197,7 +197,7 @@ async def check_user(request: Request, date_sequence = date_sequence, today_date
 # --------------------
 
 @app.get("/schedule/")
-async def schedule(request: Request, time_zone: str = "UTC", db: Session = Depends(get_db), skip: int = Query(0), limit: int = Query(50)):
+async def schedule(request: Request, time_zone: str = "UTC", db: Session = Depends(get_db), skip: int = Query(0), limit: int = Query(200)):
     login_username = request.session.get('login_username')
     time_zone = request.session.get('time_zone', time_zone)
     logger.info(f"Time zone is {time_zone}")
