@@ -533,7 +533,7 @@
         });
 
         console.log("Hello OK")
-
+        
         
         function onclickItem(id, link) {
             if (event.shiftKey) {
@@ -541,18 +541,21 @@
                 // print("ok")
                 // window.location = "/tab_00/edit_task/" + id + "&local_start_date=" + encodeURIComponent(local_start_date) + "&login_username=" + encodeURIComponent(loginUsername);
                 // window.location = "/tab_00/edit_task/" + id + login_usrename;
-
+                
                 // window.location = "/schedule/edit_task/" + id + "?local_start_date=" + encodeURIComponent(local_start_date);
                 // window.location = "/tab_00/edit_task/" + id
                 window.location = "/schedule/edit_task/" + id
                 // window.location = "/schedule/edit_task/" + id + "?link=" + encodeURIComponent(link);
                 // window.location = "/schedule/edit_task/" + id + "?local_start_date_selected=" + encodeURIComponent(local_start_date_selected.toISOString());
                 // window.location = "/schedule/edit_task/" + id + "?local_start_date_selected=" + encodeURIComponent(local_start_date_selected.toISOString());
-
-
-
+                
+                
+                
             }else{
-                window.open("https://apple.com", '_blank');
+                window.open(link, '_blank');
+                console.log("before")
+                console.log(link)
+                console.log("after")
 
             }
         }
