@@ -167,32 +167,7 @@ async def check_user(request: Request, date_sequence = date_sequence, today_date
         message_color = "#f00"
         return templates.TemplateResponse("login_signup.html", {"request": request, "message": message, "message_color": message_color})
 
-# @app.post("/login_signup/check_user/")
 
-# async def check_user(request: Request, date_sequence = date_sequence, today_date = today_date, username: str = Form(...), email: str = Form(...), password: str = Form(None), db: Session = Depends(get_db)):
-#     # hashed_password = hash_password(password)
-#     # login_username = username
-#     # db_user = db.query(User).filter(User.username == username, User.email == email, User.password == hashed_password).first()
-#     db_user = db.query(User).filter(User.username == username, User.email == email, User.password == password).first()
-#     # db_user = db.query(User).filter(User.username == username and User.email == email and User.password == hashed_password).first()
-#     # db_user = db.query(User).filter(User.username == username and User.email == email and User.password == hashed_password).first()
-    
-#     print(User.password)
-    
-#     if db_user:
-        
-        
-#         login_username = username
-#         time_zone_message = "Please select Time zone :"
-#         message_color = "#f00"
-        
-#         return templates.TemplateResponse("schedule_indicate_00.html", {"request": request, "dates": date_sequence, "today": today_date, "login_username": login_username, "time_zone_message": time_zone_message, "message_color": message_color})
-#         # return templates.TemplateResponse("login_ok.html", {"request": request, "dates": date_sequence, "today": today_date})
-#     else:
-#         message = "Log in failed. Please try again"
-#         message_color = "#f00"
-#     # Your logic here, for example, returning a signup or login page
-#         return templates.TemplateResponse("login_signup.html", {"request": request, "message": message, "message_color": message_color})
     
 # --------------------
 
@@ -215,8 +190,8 @@ async def schedule(request: Request, time_zone: str = "UTC", db: Session = Depen
         # Schedule.id_user
     ).order_by(desc(Schedule.start_datetime)).offset(skip).limit(limit).all()
     
-    print('tasks[0]', tasks[0])
-    print('taskslen', len(tasks))
+    # print('tasks[0]', tasks[0])
+    print('tasks length', len(tasks))
 
     # Check if there are more records to fetch
     total_tasks = db.query(Schedule).count()
