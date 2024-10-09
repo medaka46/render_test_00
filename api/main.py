@@ -513,11 +513,13 @@ async def create_item(request: Request, item_id: int, action: str = Form(...), n
     # local_start_datetime_with_tz  = local_start_datetime.tz_localize(time_zone)
     # local_start_datetime_with_tz  = local_start_datetime.astimezone(ZoneInfo(time_zone))
     utc_start_datetime_with_tz  = local_start_datetime_with_tz.astimezone(timezone.utc)
+    
     local_start_datetime_without_tz  = local_start_datetime_with_tz.replace(tzinfo=None)
     utc_start_datetime_without_tz  = utc_start_datetime_with_tz.replace(tzinfo=None)
     
-    local_end_datetime_with_tz  = local_end_datetime.astimezone(ZoneInfo(time_zone))
-    utc_end_datetime_with_tz  = local_end_datetime.astimezone(timezone.utc)
+    local_end_datetime_with_tz  = local_end_datetime.replace(tzinfo=ZoneInfo(time_zone))
+    # local_end_datetime_with_tz  = local_end_datetime.astimezone(ZoneInfo(time_zone))
+    utc_end_datetime_with_tz  = local_end_datetime_with_tz.replace(tzinfo=None)
     # local_end_datetime_without_tz  = datetime.strptime(local_end_datetime_with_tz, "%Y-%m-%d %H:%H").replace(tzinfo=None), 
     utc_end_datetime_without_tz  = utc_end_datetime_with_tz.replace(tzinfo=None)
     
