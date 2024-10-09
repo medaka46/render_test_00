@@ -190,7 +190,7 @@ async def schedule(request: Request, time_zone: str = "UTC", db: Session = Depen
         # Schedule.id_user
     ).order_by(desc(Schedule.start_datetime)).offset(skip).limit(limit).all()
     
-    print('tasks[0]', tasks[0])
+    # print('tasks[0]', tasks[0])
     # print('tasks length', tasks[0])
 
     # Check if there are more records to fetch
