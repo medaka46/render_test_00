@@ -440,7 +440,8 @@ async def create_item(request: Request, name: str = Form(...), date1: str = Form
     print(f"{time_zone} @ schedule/add_task")
     # local_time_zone = "Asia/Singapore"
     
-    print(f"local_start_datetime : {local_start_datetime}")
+    # print(f"local_start_datetime : {local_start_datetime}")
+    # print(f"local_end_datetime : {local_end_datetime}")
     
     # local_start_datetime_with_tz  = local_start_datetime.astimezone(ZoneInfo(get_current_timezone()))
     # local_start_datetime_with_tz  = local_start_datetime.astimezone(ZoneInfo(time_zone))
@@ -468,6 +469,11 @@ async def create_item(request: Request, name: str = Form(...), date1: str = Form
     print("utc startdatetime with tz", utc_start_datetime_with_tz)
     print("local startdatetime without tz", local_start_datetime_without_tz)
     print("utc startdatetime without tz", utc_start_datetime_without_tz)
+    print("-------------------")
+    print("local enddatetime with tz", local_end_datetime_with_tz)
+    print("utc enddatetime with tz", utc_end_datetime_with_tz)
+    print("local enddatetime without tz", local_end_datetime_without_tz)
+    print("utc enddatetime without tz", utc_end_datetime_without_tz)
     
     
     
@@ -517,22 +523,33 @@ async def create_item(request: Request, item_id: int, action: str = Form(...), n
     local_start_datetime_with_tz = local_start_datetime.replace(tzinfo=ZoneInfo(time_zone))
     utc_start_datetime_with_tz  = local_start_datetime_with_tz.astimezone(timezone.utc)
     local_start_datetime_without_tz  = local_start_datetime_with_tz.replace(tzinfo=None)
+    utc_start_datetime_without_tz  = utc_start_datetime_with_tz.replace(tzinfo=None)
+    
+    local_end_datetime_with_tz = local_end_datetime.replace(tzinfo=ZoneInfo(time_zone))
+    utc_end_datetime_with_tz  = local_end_datetime_with_tz.astimezone(timezone.utc)
+    local_end_datetime_without_tz  = local_end_datetime_with_tz.replace(tzinfo=None)
+    utc_end_datetime_without_tz  = utc_end_datetime_with_tz.replace(tzinfo=None)
     
     
     # local_start_datetime_with_tz  = local_start_datetime.tz_localize(time_zone)
     # local_start_datetime_with_tz  = local_start_datetime.astimezone(ZoneInfo(time_zone))
     
-    utc_start_datetime_without_tz  = utc_start_datetime_with_tz.replace(tzinfo=None)
     
-    local_end_datetime_with_tz  = local_end_datetime.replace(tzinfo=ZoneInfo(time_zone))
-    # local_end_datetime_with_tz  = local_end_datetime.astimezone(ZoneInfo(time_zone))
-    utc_end_datetime_with_tz  = local_end_datetime_with_tz.replace(tzinfo=None)
-    # local_end_datetime_without_tz  = datetime.strptime(local_end_datetime_with_tz, "%Y-%m-%d %H:%H").replace(tzinfo=None), 
-    utc_end_datetime_without_tz  = utc_end_datetime_with_tz.replace(tzinfo=None)
+    # local_end_datetime_with_tz  = local_end_datetime.replace(tzinfo=ZoneInfo(time_zone))
+    # # local_end_datetime_with_tz  = local_end_datetime.astimezone(ZoneInfo(time_zone))
+    # utc_end_datetime_with_tz  = local_end_datetime_with_tz.replace(tzinfo=None)
+    # # local_end_datetime_without_tz  = datetime.strptime(local_end_datetime_with_tz, "%Y-%m-%d %H:%H").replace(tzinfo=None), 
+    # utc_end_datetime_without_tz  = utc_end_datetime_with_tz.replace(tzinfo=None)
     
     # utc_start_datetime_without_tz = datetime.strptime(utc_start_datetime_without_tz, "%Y-%m-%d %H:%H")
     
     
+    print("local startdatetime", local_start_datetime)
+    print("local startdatetime with tz", local_start_datetime_with_tz)
+    print("utc startdatetime with tz", utc_start_datetime_with_tz)
+    print("local startdatetime without tz", local_start_datetime_without_tz)
+    print("utc startdatetime without tz", utc_start_datetime_without_tz)
+    print("------------------------")
     print("local startdatetime", local_start_datetime)
     print("local startdatetime with tz", local_start_datetime_with_tz)
     print("utc startdatetime with tz", utc_start_datetime_with_tz)

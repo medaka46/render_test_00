@@ -655,6 +655,7 @@ async def create_item(request: Request, item_id: int, action: str = Form(...), n
     print("utc startdatetime with tz", utc_start_datetime_with_tz)
     print("local startdatetime without tz", local_start_datetime_without_tz)
     print("utc startdatetime without tz", utc_start_datetime_without_tz)
+    print("-------------------")
     
     
     
