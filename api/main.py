@@ -512,7 +512,7 @@ async def create_item(request: Request, item_id: int, action: str = Form(...), n
     
     # local_start_datetime_with_tz  = local_start_datetime.tz_localize(time_zone)
     # local_start_datetime_with_tz  = local_start_datetime.astimezone(ZoneInfo(time_zone))
-    utc_start_datetime_with_tz  = local_start_datetime.astimezone(timezone.utc)
+    utc_start_datetime_with_tz  = local_start_datetime_with_tz.astimezone(timezone.utc)
     local_start_datetime_without_tz  = local_start_datetime_with_tz.replace(tzinfo=None)
     utc_start_datetime_without_tz  = utc_start_datetime_with_tz.replace(tzinfo=None)
     
