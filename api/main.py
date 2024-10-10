@@ -16,14 +16,28 @@ from pandas import Timestamp
 
 import os
 
+from fastapi.staticfiles import StaticFiles
+
+app = FastAPI()
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Mount the static directory to serve static files
+app.mount("/static", StaticFiles(directory=os.path.join(base_dir, "static")), name="static")
+
+# Set up Jinja2 templates
+templates = Jinja2Templates(directory=os.path.join(base_dir, "templates"))
+
+
 
 
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = FastAPI()
 app.add_middleware(SessionMiddleware, secret_key="your_secret_key")
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 
 # Set up Jinja2 templates
 templates = Jinja2Templates(directory="templates")
@@ -38,7 +52,10 @@ def get_db():
     finally:
         db.close()
 # --------------------
-@app.get("/")
+
+@app.get("/", response_class=HTMLResponse)
+
+# @app.get("/")
 async def login_signup(request: Request):
     message = "Please Log in or Sing up"
     message_color = "#0f0"
@@ -68,7 +85,8 @@ async def login_signup(request: Request):
     # Your logic here, for example, returning a signup or login page
     # return templates.TemplateResponse("test01.html", {"request": request, "message": message, "message_color": message_color})
     # print("login_signup.html")
-    return templates.TemplateResponse("login_signup.html", {"request": request, "message": message, "message_color": message_color})
+    return templates.TemplateResponse("login_signup.html", {"request": request, "message": message, "message_color": message_color, "request": request})
+    # return templates.TemplateResponse("login_signup.html", {"request": request, "message": message, "message_color": message_color})
 
 # --------------------
 
