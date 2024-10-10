@@ -16,6 +16,7 @@ if ENVIRONMENT == 'production':
     LOCAL_DB_PATH = os.path.join(os.path.dirname(__file__), '../test_08_db.db')
     # Path to the database file in the /tmp directory
     TMP_DB_PATH = '/tmp/test_08_db.db'
+    # TMP_DB_PATH = '/tmp/test_08_db_new_pp.db'
     # Copy the database file to /tmp if it doesn't already exist
     if not os.path.exists(TMP_DB_PATH):
         shutil.copyfile(LOCAL_DB_PATH, TMP_DB_PATH)
