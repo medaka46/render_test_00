@@ -5,7 +5,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
 from api.database import SessionLocal, engine, Base, ENVIRONMENT # Use absolute import
-from api.models import User, Schedule  # Use absolute import
+from api.models import User, Schedule, Link  # Use absolute import
 import pandas as pd
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
@@ -669,3 +669,69 @@ async def schedule_up(request: Request):
     
 
     return RedirectResponse("/schedule/", status_code=303)
+
+# --------------------
+@app.get("/link_00/")
+async def get_tasks(request: Request, time_zone: str = "UTC", db: Session = Depends(get_db), date_sequence = date_sequence, today_date = today_date):  
+# async def get_tasks(request: Request, db: Session = Depends(get_db), date_sequence = date_sequence, today_date = today_date):
+# async def get_tasks(request: Request, db: Session = Depends(get_db), date_sequence = date_sequence, today_date = today_date, login_username = login_username):
+    # global local_time_zone
+    # global active_meeting
+    login_username = request.session.get('login_username')
+    time_zone = request.session.get('time_zone')
+    print(f"time_zone is {time_zone}")
+    
+    # tasks = db.query(Meeting).order_by(Meeting.name).all()
+    tasks = db.query(Link).order_by(Link.id).all()
+    
+    name_items = ["Intra Net", 'Sharepoint', 'Estimation Server', 'Authrities/consultants', 'Sub-contractors/Suppliers', 'Options', 'Others', 'SIN', 'BKK', 'MLY', 'MNL','JKT', 'CHN', 'HK', 'TWN', 'VNM', 'IND', 'BGD', 'ZAM', 'GUM', 'DJI']
+    # users = db.query(User).order_by(User.start_datetime).all()
+    
+    data = [{
+    'id': task.id,
+    'name': task.name,
+    # 'start_datetime': task.start_datetime,
+    # 'end_datetime': task.end_datetime,
+    'link': task.url,
+    'category': task.category,
+    'status': task.status,
+    'id_user': task.id_user
+    } for task in tasks]
+
+    # df_tasks = pd.DataFrame(data)
+    # print(tasks.start_datetime)
+    
+    
+    df_tasks = pd.DataFrame(data)
+    print("df_tasks", df_tasks)
+    # print(df_tasks)
+    
+   
+
+    
+    df_combined = df_tasks
+    # df_combined = pd.concat([df_tasks, df_local_start_dates, df_local_start_times, df_local_end_dates, df_local_end_times], axis=1)
+    # request.session['df_combined'] = df_combined  # Save to session
+    print("df_combined", df_combined)
+    
+    
+    df_combined_dict = df_combined.to_dict(orient='records')
+    
+    length_df_combined = len(df_combined)
+    
+    time_zone_massage = "Current time zone :"
+    
+    message_color = "#0f0"
+    
+    print("df_combined", df_combined)
+    
+    tab_page_active = "link_00"
+    # request.session['link_tab_page_active'] = link_tab_page_active
+    link_tab_page_active = request.session.get('link_tab_page_active')
+    
+    
+    
+    
+    
+    return templates.TemplateResponse("link_indicate_00.html", {"request": request, "df_combined": df_combined_dict, "dates": date_sequence, "today": today_date, "time_zone": time_zone, "length_df_combined": length_df_combined, "time_zone_massage": time_zone_massage, "message_color": message_color, "login_username": login_username, "tab_page_active": tab_page_active, "link_tab_page_active": link_tab_page_active, "name_items": name_items})
+    # return templates.TemplateResponse("schedule_indicate_00.html", {"request": request, "df_combined": df_combined_dict, "dates": date_sequence, "today": today_date, "time_zone": time_zone, "length_df_combined": length_df_combined, "local_start_date": local_start_date,"local_start_time": local_start_time, "time_zone_massage": time_zone_massage, "message_color": message_color, "login_username": login_username, "tab_page_active": tab_page_active})
