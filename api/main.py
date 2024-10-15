@@ -91,7 +91,7 @@ async def login_signup(request: Request):
     print(condition)
     
     
-    # Your logic here, for example, returning a signup or login page
+    
     # return templates.TemplateResponse("test01.html", {"request": request, "message": message, "message_color": message_color})
     # print("login_signup.html")
     return templates.TemplateResponse("login_signup.html", {"request": request, "message": message, "message_color": message_color, "request": request, "condition": condition})
