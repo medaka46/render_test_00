@@ -4,7 +4,7 @@ from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, File
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
-from api.database import SessionLocal, engine, Base # Use absolute import
+from api.database import SessionLocal, engine, Base, ENVIRONMENT # Use absolute import
 from api.models import User, Schedule  # Use absolute import
 import pandas as pd
 from datetime import datetime, timedelta, timezone
@@ -45,6 +45,8 @@ templates = Jinja2Templates(directory="templates")
 # Create the database tables if they don't exist
 Base.metadata.create_all(bind=engine)
 
+condition = ""
+
 def get_db():
     db = SessionLocal()
     try:
@@ -80,12 +82,19 @@ async def login_signup(request: Request):
     request.session['project_id_order'] = 1
     
     
+    if ENVIRONMENT == 'production':
+        condition = "Production"
+    else:
+        condition = "Development"
+        
+    
+    print(condition)
     
     
     # Your logic here, for example, returning a signup or login page
     # return templates.TemplateResponse("test01.html", {"request": request, "message": message, "message_color": message_color})
     # print("login_signup.html")
-    return templates.TemplateResponse("login_signup.html", {"request": request, "message": message, "message_color": message_color, "request": request})
+    return templates.TemplateResponse("login_signup.html", {"request": request, "message": message, "message_color": message_color, "request": request, "condition": condition})
     # return templates.TemplateResponse("login_signup.html", {"request": request, "message": message, "message_color": message_color})
 
 # --------------------
@@ -178,12 +187,13 @@ async def check_user(request: Request, date_sequence = date_sequence, today_date
             "message_color": message_color,
             "skip": skip,
             "limit": limit,
-            "has_more": False  # or True based on your logic
+            "has_more": False,
+            "condition": condition# or True based on your logic
         })
     else:
         message = "Log in failed. Please try again"
         message_color = "#f00"
-        return templates.TemplateResponse("login_signup.html", {"request": request, "message": message, "message_color": message_color})
+        return templates.TemplateResponse("login_signup.html", {"request": request, "message": message, "message_color": message_color, "condition": condition})
 
 
     
@@ -302,7 +312,8 @@ async def schedule(request: Request, time_zone: str = "UTC", db: Session = Depen
         "has_more": has_more,
         "next_skip": skip + limit if has_more else None,
         "current_page": current_page,
-        "total_pages": total_pages
+        "total_pages": total_pages,
+        "condition": condition
     })
 
 

@@ -19,23 +19,27 @@
         </div>
 
     </div>
+    
+    <div style="display: flex; align-items: center; width: 100%;">
+    
+        <form action="/schedule/add_task/" method="post" style="display: flex; align-items: center; width: 100%;">
+            <input type="hidden" name="time_zone" value="{{ time_zone }}">
+            <input type="text" name="name" placeholder="Enter Name ..." style="background-color: #444; color: #fff;" oninput="this.style.backgroundColor = this.value ? '#444' : '#fff'; this.style.color = '#999'">
+            <input id="input_date" type="date" name="date1" placeholder="MM/DD/YYYY" style="background-color: #444; color: #888;" onfocus="(this.type='date')">
+            <input type="time" name="start_time" placeholder="start HH:MM" value="00:00" style="background-color: #444; color: #888;" onfocus="(this.type='time')">
+            <input type="time" name="end_time" value="00:00" style="background-color: #444; color: #888;">
+            <input type="text" name="link" placeholder="Enter link..." style="background-color: #444; color: #fff;" oninput="this.style.backgroundColor = this.value ? '#444' : '#fff'; this.style.color = '#999'">
+            <input type="text" name="category" placeholder="Enter category..." style="background-color: #444; color: #fff;" oninput="this.style.backgroundColor = this.value ? '#444' : '#fff'; this.style.color = '#999'">
+            <input type="text" name="status" placeholder="Enter status..." style="background-color: #444; color: #fff;" oninput="this.style.backgroundColor = this.value ? '#444' : '#fff'; this.style.color = '#999'">
+            <button type="submit" style="background-color: #444; color: #0f0;">Add Task</button>
+        
+        </form>
+        <form action="/download_db/" method="get" style="margin-left: 10px;">
+            <button type="submit" style="background-color: #444; color: #0f0;">Download</button>
+        </form>
 
-    <form action="/schedule/add_task/" method="post" style="display: flex; align-items: center; width: 100%;">
-        <input type="hidden" name="time_zone" value="{{ time_zone }}">
-        <input type="text" name="name" placeholder="Enter Name ..." style="background-color: #444; color: #fff;" oninput="this.style.backgroundColor = this.value ? '#444' : '#fff'; this.style.color = '#999'">
-        <input id="input_date" type="date" name="date1" placeholder="MM/DD/YYYY" style="background-color: #444; color: #888;" onfocus="(this.type='date')">
-        <input type="time" name="start_time" placeholder="start HH:MM" value="00:00" style="background-color: #444; color: #888;" onfocus="(this.type='time')">
-        <input type="time" name="end_time" value="00:00" style="background-color: #444; color: #888;">
-        <input type="text" name="link" placeholder="Enter link..." style="background-color: #444; color: #fff;" oninput="this.style.backgroundColor = this.value ? '#444' : '#fff'; this.style.color = '#999'">
-        <input type="text" name="category" placeholder="Enter category..." style="background-color: #444; color: #fff;" oninput="this.style.backgroundColor = this.value ? '#444' : '#fff'; this.style.color = '#999'">
-        <input type="text" name="status" placeholder="Enter status..." style="background-color: #444; color: #fff;" oninput="this.style.backgroundColor = this.value ? '#444' : '#fff'; this.style.color = '#999'">
-        <button type="submit" style="background-color: #444; color: #0f0;">Add Task</button>
-        <div style="margin-left: auto;">
-            <form action="/download_db/" method="get">
-                <button type="submit" style="background-color: #444; color: #0f0;">Download</button>
-            </form>
-        </div>
-    </form>
+    </div>
+
 
     <!-- <form action="/schedule/add_task/" method="post" style="display: flex; align-items: center; width: 100%">
         <input type="hidden" name="time_zone" value="{{ time_zone }}">
