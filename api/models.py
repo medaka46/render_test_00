@@ -20,7 +20,7 @@ class Link(Base):
     id = Column(Integer, Sequence('link_id_seq'), primary_key=True, index=True)
     
     name = Column(String, index=True)
-    url = Column(String, index=True)
+    url = Column(String, unique=False, index=True)
     category = Column(String, index=True)
     status = Column(String, index=True)
     
@@ -62,3 +62,5 @@ class Project(Base):
     date_of_submission = Column(Date)
     
     id_user = Column(Integer)
+
+

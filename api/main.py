@@ -735,3 +735,32 @@ async def get_tasks(request: Request, time_zone: str = "UTC", db: Session = Depe
     
     return templates.TemplateResponse("link_indicate_00.html", {"request": request, "df_combined": df_combined_dict, "dates": date_sequence, "today": today_date, "time_zone": time_zone, "length_df_combined": length_df_combined, "time_zone_massage": time_zone_massage, "message_color": message_color, "login_username": login_username, "tab_page_active": tab_page_active, "link_tab_page_active": link_tab_page_active, "name_items": name_items})
     # return templates.TemplateResponse("schedule_indicate_00.html", {"request": request, "df_combined": df_combined_dict, "dates": date_sequence, "today": today_date, "time_zone": time_zone, "length_df_combined": length_df_combined, "local_start_date": local_start_date,"local_start_time": local_start_time, "time_zone_massage": time_zone_massage, "message_color": message_color, "login_username": login_username, "tab_page_active": tab_page_active})
+# --------------------
+@app.post("/link/add_task_01/")
+
+# async def create_item(name: str = Form(...), date1: str = Form(...), link: str = Form(...), tel: str = Form(...), db: Session = Depends(get_db)):
+# async def create_item(name: str = Form(...), date1: date1 = Form(...), link: str = Form(...), tel: str = Form(...), db: Session = Depends(get_db)):
+async def create_item(request: Request, name: str = Form(...), link: str = Form(None), category: str = Form(None), status: str = Form(None), username: str = Form(None), time_zone: str = Form(None), db: Session = Depends(get_db)):
+# async def create_item(request: Request, name: str = Form(...), link: str = Form(None), category: str = Form(None), status: str = Form(None), username: str = Form(None), time_zone: str = Form(None), db: Session = Depends(get_db)):
+# async def create_item(request: Request, name: str = Form(...), date1: str = Form(...), start_time: str = Form(...), end_time: str = Form(...), link: str = Form(None), category: str = Form(None), status: str = Form(None), username: str = Form(None), local_time_zone = local_time_zone, db: Session = Depends(get_db)):
+  
+    # global active_meeting
+    # date1 = date1.date()
+# Assuming date1 is a string in the format 'YYYY-MM-DD'
+    # date1 = datetime.strptime(date1, '%Y-%m-%d').date()
+    
+    # print("test")
+    print(f"{time_zone} @ link/add_task")
+    # local_time_zone = "Asia/Singapore"
+    
+   
+    
+    
+    db_item = Link(name=name, url=link, category=category, status=status)
+    # db_item = Schedule(name=name, start_datetime=utc_start_datetime_without_tz, end_datetime=utc_end_datetime_without_tz, link=link, category=category, status=status)
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+    
+    return RedirectResponse("/link_00/", status_code=303)
+
