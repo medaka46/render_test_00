@@ -669,6 +669,34 @@
         location.reload();
         }, 1000);
 
+
+        async function fetchLinks() {
+            try {
+                const response = await fetch('/api/links');
+                const links = await response.json();
+                updateLinks(links);
+            } catch (error) {
+                console.error('Error fetching links:', error);
+            }
+        }
+
+        function updateLinks(links) {
+            const container = document.getElementById('links-container');
+            container.innerHTML = ''; // Clear existing content
+
+            links.forEach(link => {
+                const linkElement = document.createElement('div');
+                linkElement.textContent = `${link.name}: ${link.url}`;
+                container.appendChild(linkElement);
+            });
+        }
+
+        // Fetch links every 10 seconds
+        setInterval(fetchLinks, 10000);
+
+        // Fetch links immediately on page load
+        window.onload = fetchLinks;
+
       
 
     
