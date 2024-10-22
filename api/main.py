@@ -317,7 +317,18 @@ async def schedule(request: Request, time_zone: str = "UTC", db: Session = Depen
     })
 
 
-
+# --------------------
+@app.get("/schedule_reload/", response_class=JSONResponse)
+async def get_schedule_data(db: Session = Depends(get_db)):
+    tasks = db.query(Link).all()
+    data = [{
+        'id': task.id,
+        'name': task.name,
+        'url': task.url,
+        'category': task.category,
+        'status': task.status
+    } for task in tasks]
+    return data
     
 # --------------------
 
