@@ -155,10 +155,14 @@
         });
     });
 
-    function loadPage(skip) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('skip', skip);
-        window.location.href = url.toString();
+
+
+            // Function to reload the page
+    function autoReload() {
+        location.reload(); // Reloads the current page
     }
+
+    // Set interval to call the autoReload function every 4000 milliseconds (4 seconds)
+    setInterval(autoReload, 5000);
 </script>
 {% endblock %}
