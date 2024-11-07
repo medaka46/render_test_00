@@ -450,8 +450,64 @@
         background: white;
         padding: 10px;
         border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+    .live-update-indicator {
+        display: flex;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        color: #0f0;
+    }
+    
+    .antenna {
+        position: relative;
+        width: 1px;
+        height: 1px;
+        background-color: #333;
+        margin-right: 10px;
+    }
+    
+    .wave {
+        position: absolute;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        border: 2px solid #0f0;
+        opacity: 0;
+        animation: wave-animation 3.0s infinite;
+    }
+    
+    .wave1 {
+        animation-delay: 0s;
+    }
+    
+    .wave2 {
+        animation-delay: 0.5s;
+    }
+    
+    .wave3 {
+        animation-delay: 1s;
+    }
+    
+    @keyframes wave-animation {
+        0% {
+            width: 0;
+            height: 0;
+            opacity: 1;
+            transform: translate(-50%, -50%);
+        }
+        100% {
+            width: 30px;
+            height: 30px;
+            opacity: 0;
+            transform: translate(-50%, -50%);
+            color: #0f0;
+
+        }
+    }
+            
     </style>
 
 
@@ -491,7 +547,8 @@
 
                 <div>
                     
-                    <label for="time_zone" style="color: {{ message_color }}">{{ time_zone_message }}</label>
+                    <label for="time_zone" style="color: #0f0">{{ time_zone_message }}</label>
+                    <!-- <label for="time_zone" style="color: {{ message_color }}">{{ time_zone_message }}</label> -->
                     <input type="hidden" name="login_username" value="{{ login_username }}">
     
                     <select id="time_zone" name="time_zone" required aria-label="Time Zone Selection" style="color: #0f0; background-color: #444;">
@@ -504,7 +561,8 @@
                         <option value="utc" {% if time_zone == "utc" %}selected{% endif %}>Coordinated Universal Time : 00:00</option>
                     </select>
                 </div>
-                <button type="submit" style="background-color: #444; color: #0f0;">Select</button>
+                <button type="submit" style="background-color: #444; color: {{ message_color }}">Select</button>
+                <!-- <button type="submit" style="background-color: #444; color: #0f0;">Select</button> -->
             </form>
 
 
