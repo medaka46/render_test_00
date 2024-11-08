@@ -683,6 +683,27 @@ async def schedule_up(request: Request):
     return RedirectResponse("/schedule/", status_code=303)
 
 # --------------------
+@app.get("/link_001/")
+async def get_tasks(request: Request, time_zone: str = "UTC", db: Session = Depends(get_db), date_sequence = date_sequence, today_date = today_date):  
+
+    link_tab_page_active = "link_001"
+    request.session['link_tab_page_active'] = link_tab_page_active
+    return RedirectResponse("/link_00/", status_code=303)
+    
+@app.get("/link_002/")
+async def get_tasks(request: Request, time_zone: str = "UTC", db: Session = Depends(get_db), date_sequence = date_sequence, today_date = today_date):  
+
+    link_tab_page_active = "link_002"
+    request.session['link_tab_page_active'] = link_tab_page_active
+    
+    
+    return RedirectResponse("/link_00/", status_code=303)
+
+
+
+
+
+
 @app.get("/link_00/")
 async def get_tasks(request: Request, time_zone: str = "UTC", db: Session = Depends(get_db), date_sequence = date_sequence, today_date = today_date):  
 # async def get_tasks(request: Request, db: Session = Depends(get_db), date_sequence = date_sequence, today_date = today_date):
@@ -774,5 +795,111 @@ async def create_item(request: Request, name: str = Form(...), link: str = Form(
     db.commit()
     db.refresh(db_item)
     
+    return RedirectResponse("/link_00/", status_code=303)
+
+@app.get("/link/edit_task/{item_id}")
+# @app.get("/tab_00/edit_task/{item_id}")
+async def edit_task(item_id: int, request: Request, db: Session = Depends(get_db), date_sequence = date_sequence, today_date = today_date, link: str = Query(None)):
+# async def edit_task(item_id: int, request: Request, db: Session = Depends(get_db), date_sequence = date_sequence, today_date = today_date, local_start_date_selected: str = Query(None)):
+# async def edit_task(item_id: int, request: Request, db: Session = Depends(get_db), date_sequence = date_sequence, today_date = today_date, login_username: Optional[str] = None, local_start_date: str = Query(None, description="The date to edit the task")):
+    db_item = db.query(Link).filter(Link.id == item_id).first()
+    tasks = db.query(Link).order_by(Link.id).all()
+    
+    # tasks = db.query(Schedule).all()
+    
+    login_username = request.session.get('login_username')# login_username
+    time_zone = request.session.get('time_zone')# login_username
+    # df_combined = request.session.get('df_combined')# login_username
+    print("user :", login_username)
+    print("time_zone :", time_zone)
+
+    
+    # print("local_end_date", local_end_date)
+    # print(type(local_start_date_selected))
+    # start_date_selected = db_item.start_datetime.date()
+    
+    data = [{
+    'id': task.id,
+    'name': task.name,
+    'url': task.url,
+    'category': task.category,
+    'status': task.status,
+    'id_user': task.id_user
+    } for task in tasks]
+
+    # df_tasks = pd.DataFrame(data)
+    # print(tasks.start_datetime)
+    
+    
+    df_tasks = pd.DataFrame(data)
+    
+    df_combined = df_tasks
+    
+    df_combined_dict = df_combined.to_dict(orient='records')
+    
+    link_tab_page_active = request.session.get('link_tab_page_active')
+    
+    
+
+    
+    if db_item:
+        return templates.TemplateResponse("link_edit_00.html", {"request": request, "df_combined": df_combined_dict, "item": db_item, "dates": date_sequence, "today": today_date, "time_zone": time_zone, "login_username": login_username, "link_tab_page_active": link_tab_page_active})
+        # return templates.TemplateResponse("schedule_edit_00.html", {"request": request, "time_zone": time_zone, "item": db_item, "tasks": tasks, "dates": date_sequence, "today": today_date, "local_start_date": local_start_date, "local_start_time": local_start_time, "local_end_time": local_end_time, "login_username": login_username})
+        # return templates.TemplateResponse("schedule_indicate_00.html", {"request": request, "df_combined": df_combined_dict, "dates": date_sequence, "today": today_date, "time_zone": time_zone, "length_df_combined": length_df_combined, "local_start_time": local_start_time, "time_zone_massage": time_zone_massage, "message_color": message_color, "login_username": login_username})
+    
+        # return templates.TemplateResponse("edit_00.html", {"request": request, "item": db_item, "tasks": tasks, "dates": date_sequence, "today": today_date, "local_start_date": local_start_date, "local_start_time": local_start_time, "local_end_time": local_end_time, login_username: login_username})
+        # return templates.TemplateResponse("index_00.html", {"request": request, "item": db_item})
+    else:
+        raise HTTPException(status_code=404, detail="Item not found")
+    
+    
+@app.post("/link/update_task/{item_id}")
+
+async def create_item(request: Request, item_id: int, name: str = Form(...), link: str = Form(None), category: str = Form(None), status: str = Form(None), username: str = Form(None), time_zone: str = Form(None), db: Session = Depends(get_db)):
+
+
+    # date1 = datetime.strptime(date1, '%Y-%m-%d').date()
+    login_username = request.session.get('login_username')# login_username
+    time_zone = request.session.get('time_zone')# login_username
+    
+    
+    
+    
+    
+    
+    
+    # end_datetime  = local_end_datetime.astimezone(ZoneInfo(time_zone))
+
+    
+    db_item = db.query(Link).filter(Link.id == item_id).first()
+    if db_item:
+        # db_item = Schedule(name=name, start_datetime=utc_start_datetime_with_tz, end_datetime=utc_end_datetime_with_tz, link=link, category=category, status=status)
+        
+        
+        db_item.name = name
+        # db_item.start_datetime = utc_start_datetime_without_tz
+        # db_item.start_datetime = datetime.strptime(utc_start_datetime_without_tz.strftime("%Y-%m-%d %H:%H"), "%Y-%m-%d %H:%H")
+        # db_item.end_datetime = utc_end_datetime_without_tz
+        # db_item.end_datetime = datetime.strptime(utc_end_datetime_without_tz, "%Y-%m-%d %H:%H")
+        db_item.link = link
+        db_item.category = category
+        db_item.status = status
+        # db_item.end_datetime = local_end_date
+        # db_item.id_user = id_user
+        db.commit()
+        db.refresh(db_item)
+        return RedirectResponse("/link_00/", status_code=303)
+    else:
+        raise HTTPException(status_code=404, detail="Item not found")  
+    
+    
+@app.post("/link/delete_task/")
+async def delete_item(item_id: int = Form(...), db: Session = Depends(get_db)):
+    
+    print("delete!!")
+    db_item = db.query(Link).filter(Link.id == item_id).first()
+    if db_item:
+        db.delete(db_item)
+        db.commit()
     return RedirectResponse("/link_00/", status_code=303)
 

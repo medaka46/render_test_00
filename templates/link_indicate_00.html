@@ -26,27 +26,32 @@
 
 
       
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+            <form action="/link/add_task_01/" method="post" style="display: flex;">
+                <input type="hidden" name="time_zone" value="{{ time_zone }}">
+                
+                <input type="text" name="name" placeholder="Enter Name ..." style="background-color: #444; color: #fff;" oninput="this.style.backgroundColor = this.value ? '#444' : '#fff'; this.style.color = '#999'">
+                
+                <input type="text" name="link" placeholder="Enter link..." style="background-color: #444; color: #fff;" oninput="this.style.backgroundColor = this.value ? '#444' : '#fff'; this.style.color = '#999'">
+                
+                <input id="input_category" type="text" name="category" placeholder="Enter category..." style="background-color: #444; color: #888;" onfocus="(this.type='category')">
+                
+                <input type="text" name="status" placeholder="Enter status..." style="background-color: #444; color: #fff;" oninput="this.style.backgroundColor = this.value ? '#444' : '#fff'; this.style.color = '#999'">
+                
+                <button type="submit" style="background-color: #444; color: #0f0;">Add Task</button>
+            </form>
+
+            <div class="live-update-indicator" style="display: flex; align-items: center; margin-left: auto; margin-right: 10px;">
+                <div class="antenna">
+                    <div class="wave wave1"></div>
+                    <div class="wave wave2"></div>
+                    <div class="wave wave3"></div>
+                </div>
+                <span>Live Updating</span>
+            </div>
+        </div>
 
         
-        <form action="/link/add_task_01/" method="post">
-            <input type="hidden" name="time_zone" value="{{ time_zone }}">
-
-            <input type="text" name="name" placeholder="Enter Name ..." style="background-color: #444; color: #fff;" oninput="this.style.backgroundColor = this.value ? '#444' : '#fff'; this.style.color = '#999'">
-            <!-- <input type="text" name="name" placeholder="Enter Name ..." style="background-color: #444; color: #fff;"> -->
-
-            <input type="text" name="link" placeholder="Enter link..." style="background-color: #444; color: #fff;" oninput="this.style.backgroundColor = this.value ? '#444' : '#fff'; this.style.color = '#999'">
-
-            <input id="input_category" type="text" name="category" placeholder="Enter category..."  style="background-color: #444; color: #888;"
-                    onfocus="(this.type='category')">
-
-            <!-- <input type="time"; name="start_time"; placeholder="start HH:MM";  style="background-color: #444; color: #888;"
-                    onfocus="(this.type='time')">
-            <input type="time" name="end_time"   style="background-color: #444; color: #888;"> -->
-                    
-            <!-- <input type="text" name="category" placeholder="Enter category..." style="background-color: #444; color: #fff;" oninput="this.style.backgroundColor = this.value ? '#444' : '#fff'; this.style.color = '#999'"> -->
-            <input type="text" name="status" placeholder="Enter status..." style="background-color: #444; color: #fff;" oninput="this.style.backgroundColor = this.value ? '#444' : '#fff'; this.style.color = '#999'">
-            <button type="submit" style="background-color: #444; color: #0f0;">Add Task</button>
-        </form>
         <!-- <button onclick="alertFunction()">Click Me!</button> -->
 
 
@@ -183,6 +188,19 @@
     
         // Fetch data immediately on page load
         window.onload = fetchData;
+
+                    // Function to reload the page
+        function autoReload() {
+            location.reload(); // Reloads the current page
+        }
+
+        // Set interval to call the autoReload function every 4000 milliseconds (4 seconds)
+        setInterval(autoReload, 300000);
+
+
+
+
+
 
 
     </script>
