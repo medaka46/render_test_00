@@ -113,8 +113,12 @@
                             {% for item in df_combined %}
                                 {% if dates[i+ii*7] == item["local_start_date"] %}
                                     <li class="li" onclick="onclickItem('{{ item.id }}', '{{ item.link }}')"> 
+                                        {% set start_time_parts = item.local_start_time.split(':') %}
+                                        {% set start_time_minute = start_time_parts[1] %}
+                                        {% set end_time_parts = item.local_end_time.split(':') %}
+                                        {% set end_time_minute = end_time_parts[1] %}
 
-                                        {% if item.local_start_time == '00:00' and item.local_end_time == '00:00' %}
+                                        {% if start_time_minute == '01' and end_time_minute == '01' %}
                                             {{ '🟩 ' ~item.name }}
                                         {% else %}
                                             {{ item.local_start_time~ '-' ~item.local_end_time~ ' ' ~item.name }}
@@ -128,7 +132,7 @@
             </div>
         {% endfor %}
     </div>
-    <div class="pagination-controls">
+    <!-- <div class="pagination-controls">
         {% if skip > 0 %}
             <button onclick="loadPage({{ skip - limit }})">Previous</button>
         {% endif %}
@@ -137,7 +141,7 @@
         {% endif %}
         <span class="page">Page {{ current_page }} of {{ total_pages }}</span>
 
-    </div>
+    </div> -->
 </main>
 
 <footer>

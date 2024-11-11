@@ -216,7 +216,9 @@ async def schedule(request: Request, time_zone: str = "UTC", db: Session = Depen
         # Schedule.category,
         # Schedule.status,
         # Schedule.id_user
-    ).order_by(desc(Schedule.start_datetime)).offset(skip).limit(limit).all()
+    # ).order_by(Schedule.start_datetime).offset(skip).limit(limit).all()
+    ).order_by(Schedule.start_datetime).all()
+    # ).order_by(desc(Schedule.start_datetime)).offset(skip).limit(limit).all()
     
     # print('tasks[0]', tasks[0])
     # print('tasks length', tasks[0])
@@ -384,7 +386,7 @@ async def edit_task(item_id: int, request: Request, db: Session = Depends(get_db
         # Schedule.category,
         # Schedule.status,
         # Schedule.id_user
-    ).order_by(desc(Schedule.start_datetime)).offset(skip).limit(limit).all()
+    ).order_by(Schedule.start_datetime).all()
 
     # Check if there are more records to fetch
     total_tasks = db.query(Schedule).count()
@@ -468,9 +470,9 @@ async def edit_task(item_id: int, request: Request, db: Session = Depends(get_db
 async def create_item(request: Request, name: str = Form(...), date1: str = Form(...), start_time: str = Form(...), end_time: str = Form(...), link: str = Form(None), category: str = Form(None), status: str = Form(None), username: str = Form(None), time_zone: str = Form(None), db: Session = Depends(get_db)):
 # async def create_item(request: Request, name: str = Form(...), date1: str = Form(...), start_time: str = Form(...), end_time: str = Form(...), link: str = Form(None), category: str = Form(None), status: str = Form(None), username: str = Form(None), local_time_zone = local_time_zone, db: Session = Depends(get_db)):
     date1 = datetime.strptime(date1, '%Y-%m-%d').date()
-    if start_time == '' and end_time == '':
-        start_time = "00:00"
-        end_time = "00:00"
+    if start_time == '00:00' and end_time == '00:00':
+        start_time = "00:01"
+        end_time = "00:01"
     else:
         pass
     # global active_meeting
