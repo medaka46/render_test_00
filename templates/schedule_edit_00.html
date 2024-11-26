@@ -109,7 +109,7 @@
             </div>
         {% endfor %}
     </div>
-    <div class="pagination-controls">
+    <!-- <div class="pagination-controls">
         {% if skip > 0 %}
             <button onclick="loadPage({{ skip - limit }})">Previous</button>
         {% endif %}
@@ -117,7 +117,7 @@
             <button onclick="loadPage({{ skip + limit }})">Next</button>
         {% endif %}
         <span>Page {{ current_page }} of {{ total_pages }}</span>
-    </div>
+    </div> -->
     <!-- <div class="edit-form">
         <form action="/schedule/update_task/{{ item.id }}" method="post">
             <label for="name">Name:</label>

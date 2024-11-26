@@ -234,7 +234,8 @@ async def schedule(request: Request, time_zone: str = "UTC", db: Session = Depen
     start_date_adjust = request.session.get('start_date_adjust', 0)
     start_date = datetime.today() - timedelta(days=datetime.today().weekday() + start_date_adjust)
     date_sequence = [str((start_date + timedelta(days=i)).strftime('%Y-%m-%d')) for i in range(7*50)]
-    today_date = datetime.today().strftime('%Y-%m-%d')
+    today_date = datetime.today().astimezone(ZoneInfo(time_zone)).strftime('%Y-%m-%d')
+    # today_date = datetime.today().strftime('%Y-%m-%d')
 
     data = [{
         'id': task.id,
